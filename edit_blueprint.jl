@@ -4,9 +4,7 @@ bstring = "H4sIAAAAAAAA/42R0WrDMAxFfyX0OYImg74Uf0vxbK0V2HImOWHD5N/ndKOsacn2FAjn5
 
 zipped = base64decode(bstring)
 zippedIO = IOBuffer(zipped)
-unzipped = ZipFile.Reader(zipped).read()
-print(unzipped)
-
-
-
-
+unzipped = read(ZlibInflateInputStream(zipped))
+ [@printf "%c" c for c in unzipped]
+ 
+ 
