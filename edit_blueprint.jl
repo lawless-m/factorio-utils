@@ -7,4 +7,56 @@ zippedIO = IOBuffer(zipped)
 unzipped = read(ZlibInflateInputStream(zipped))
  [@printf "%c" c for c in unzipped]
  
+ #=
+ 
+ expands to this (though I added the  newlines)
+ 
+ do local _={
+	entities={
+		 {name="assembling-machine-2",position={x=-3,y=0}}, 
+		 {name="smart-inserter",position={x=-1,y=0},direction=6},
+		 {name="logistic-chest-passive-provider",position={x=0,y=0}},
+		 {name="assembling-machine-2",position={x=3,y=0}},
+		 {name="medium-electric-pole",position={x=1,y=-1}},
+		 {name="smart-inserter",position={x=1,y=0},direction=2},
+		 {name="fast-inserter",position={x=-1,y=1},direction=2},
+		 {name="logistic-chest-requester",position={x=0,y=1}},
+		 {name="fast-inserter",position={x=1,y=1},direction=6}
+	}
+	,icons={{index=1,name="assembling-machine-2"},{index=2,name="assembling-machine-2"}}
+	};
+	return _;
+	end
+
+don't know what this is
+	
+602-element Array{
+Void,1}:                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ ⋮                                                                                                                          
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ nothing                                                                                                                    
+ =#
  
