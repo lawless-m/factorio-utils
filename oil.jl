@@ -1,40 +1,6 @@
-using JuMP
-
-m = Model()
-
-type Recipe
-	name::AbstractString
-	#nfacs::Int64
-	time::Float64
-	outs::Dict{AbstractString, Float64}
-	ins::Dict{AbstractString, Float64}
-	#Recipe(n, t) = new(n, 0, t, Dict{AbstractString, Float64}(), Dict{AbstractString, Float64}())
-	Recipe(name, time, speed) = new(name, time/speed, Dict{AbstractString, Float64}(), Dict{AbstractString, Float64}())
-end
-
-function production(r::Recipe, nfacs)
-	@printf "%s: %d\n" r.name nfacs
-	@printf "\tProduces\n"
-	for (k,v) in r.outs
-		@printf "\t\t%0.2f %s per min\n" 60v * nfacs k
-	end
-	@printf "\tConsumes\n"
-	for (k,v) in r.ins
-		@printf "\t\t%0.2f %s per min\n" 60v * nfacs k
-	end
-end
+include("JuMP.jl")
 
 @enum Rnum AOP HOC LOC SOL ROK
-
-recips = Dict{Rnum, Recipe}()
-
-macro IN(rnum, iname, iqty)
-	:(recips[$rnum].ins[$iname] = $iqty / recips[$rnum].time)
-end
-
-macro OUT(rnum, iname, iqty)
-	:(recips[$rnum].outs[$iname] = $iqty / recips[$rnum].time)
-end
 
 recips[AOP] = Recipe("Advanced Oil Processing", 5.0, 1 * 1.5 * 1.5)
 @IN AOP "Crude Oil" 10.
@@ -50,16 +16,16 @@ recips[HOC] = Recipe("Heavy Oil Cracking", 5.0 , 1.25)
 
 recips[LOC] = Recipe("Light Oil Cracking", 5.0 , 1.25)
 @IN LOC "Light Oil" 3.
-@IN LOC "Water" 3
+@IN LOC "Water" 3.
 @OUT LOC "Petroleum Gas" 2.
 
 recips[SOL] = Recipe("Solid Fuel", 2., 1.25)
 @IN SOL "Petroleum Gas" 2.0
-@OUT SOL "Solid Fuel" 1
+@OUT SOL "Solid Fuel" 1.
 
 recips[ROK] = Recipe("Rocket Fuel Assembly", 30., 1.25)
 @IN ROK "Solid Fuel" 10.
-@OUT ROK "Rocket Fuel" 1
+@OUT ROK "Rocket Fuel" 1.
 
 @variable(m, AOPs >= 0, Int)
 @variable(m, HOCs >= 0, Int)
