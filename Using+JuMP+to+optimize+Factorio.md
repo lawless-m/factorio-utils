@@ -1,4 +1,5 @@
 
+Here I use Julia's Linear Programming functions to see how to improve my Production Module build
 
 ```julia
 Pkg.add("JuMP")
