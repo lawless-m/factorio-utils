@@ -6,11 +6,6 @@ Pkg.add("Cbc")
 ;
 ```
 
-    [1m[34mINFO: Nothing to be done
-    [0m[1m[34mINFO: Nothing to be done
-    [0m
-
-
 ```julia
 using JuMP
 ;
