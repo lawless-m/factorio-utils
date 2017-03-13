@@ -202,7 +202,7 @@ We want at least 1 PROD3 every 1/60th of a minute
 @constraint(m, @OUT(PROD3s) >= 1/60)
 ```
 
-And, in this case, our objective is to have as few assembly machines as possible (which is shown in the output)
+And, in this case, our objective is to have as few assembly machines as possible
 
 
 ```julia
@@ -211,12 +211,6 @@ And, in this case, our objective is to have as few assembly machines as possible
 @objective(m, Min, sum(collect(keys(Machine))))
 
 ```
-
-
-
-
-$$ PROD1s + PROD3s + BLUECs + COPPERCs + REDCs + COPPERPs + PROD2s + IRONPs + GREENCs + IRONOs + COPPEROs + PLASTICs $$
-
 
 
 That's the code for the problem, so we can now run the solver
