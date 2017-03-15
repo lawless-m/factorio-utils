@@ -77,7 +77,10 @@ recipe = Recipe("Crude Oil Pumping", 1., 1.)
 @OUT "Crude Oil" 0.1
 
 macro Factories() :(collect(keys(recipes))) end
+
 @variable(m, Factory[@Factories] >= 0, Int)
+
+
 macro SUM(recipe, dir) :(sum([Factory[F] * get(recipes[F].$dir, $recipe, 0) for F in @Factories])) end
 macro OUTS(recipe) :(@SUM($recipe, outs)) end
 macro INS(recipe)  :(@SUM($recipe, ins)) end
