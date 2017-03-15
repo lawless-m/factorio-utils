@@ -1,18 +1,6 @@
 
 
 
-type Recipe
-	name::AbstractString
-	time::Float64
-	outs::Dict{AbstractString, Float64}
-	ins::Dict{AbstractString, Float64}
-	function Recipe(name, time, speed)
-		recips[name] = new(name, time/speed, Dict{AbstractString, Float64}(), Dict{AbstractString, Float64}())
-		recips[name]
-	end
-end
-
-recips = Dict{AbstractString, Recipe}()
 
 function production(r::Recipe, nfacs)
 	if nfacs == 0 return end
