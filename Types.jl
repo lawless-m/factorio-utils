@@ -50,6 +50,22 @@ type Assembler <: Factory
 	end
 end
 	
+type OilBasic <: Factory
+	modules::Vector{Module}
+	speed::Float64
+	function ChemPlant()
+		return new(Vector{Module}(), 1)
+	end
+end
+
+type OilAdvanced <: Factory
+	modules::Vector{Module}
+	speed::Float64
+	function ChemPlant()
+		return new(Vector{Module}(2), 1)
+	end
+end
+
 type ChemPlant <: Factory	
 	modules::Vector{Module}
 	speed::Float64

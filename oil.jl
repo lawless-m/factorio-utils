@@ -80,11 +80,14 @@ macro Factories() :(collect(keys(recipes))) end
 
 @variable(m, Factory[@Factories] >= 0, Int)
 
+macro FSUM(fac, recipe, dir) :(Factory[$fac] * get(recipes[$fac].$dir, $recipe, 0)) end
+macro ALLFSUM(recipe, dir) :(sum([@FSUM(F, $recipe, $dir) for F in @Factories])) end
+macro OUTS(recipe) :(@ALLFSUM($recipe, outs)) end
+macro INS(recipe)  :(@ALLFSUM($recipe, ins)) end
 
-macro SUM(recipe, dir) :(sum([Factory[F] * get(recipes[F].$dir, $recipe, 0) for F in @Factories])) end
-macro OUTS(recipe) :(@SUM($recipe, outs)) end
-macro INS(recipe)  :(@SUM($recipe, ins)) end
 for r in Products @constraint(m, @INS(r) <= @OUTS(r)) end
+@constraint(m, Factory["@INS("Heavy Oil") >= @FSUM("Advanced Oil Processing", "Heavy Oil", outs))
+
 
 @constraint(m, Factory["Crude Oil Pumping"] == 20)
 @objective(m, Max, @OUTS("Rocket Fuel"))
