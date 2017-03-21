@@ -74,7 +74,9 @@ recipe = Recipe("Rocket Fuel", 30., 1.25)
 
 recipe = Recipe("Crude Oil Pumping", 1., 1.)
 @IN "Pump" 0.1
-@OUT "Crude Oil" 0.1
+@OUT "crude-oil" 0.1
+
+include("recipe_protos.jl")
 
 macro Factories() :(collect(keys(recipes))) end
 
@@ -86,11 +88,11 @@ macro OUTS(recipe) :(@ALLFSUM($recipe, outs)) end
 macro INS(recipe)  :(@ALLFSUM($recipe, ins)) end
 
 for r in Products @constraint(m, @INS(r) <= @OUTS(r)) end
-@constraint(m, Factory["@INS("Heavy Oil") >= @FSUM("Advanced Oil Processing", "Heavy Oil", outs))
+@constraint(m, Factory["@INS("heavy-oil") >= @FSUM("advanced-oil-processing, "heavy-oil", outs))
 
 
 @constraint(m, Factory["Crude Oil Pumping"] == 20)
-@objective(m, Max, @OUTS("Rocket Fuel"))
+@objective(m, Max, @OUTS("rocket-fuel"))
 
 solve(m)
 
