@@ -359,7 +359,7 @@ recipe = Recipe{Assembler}("rail", 0.5)
 @RIN "stone" 1
 @RIN "iron-stick" 1
 @RIN "steel-plate" 1
-@ROUT "rail" 1
+@ROUT "rail" 2
 
 recipe = Recipe{Assembler}("diesel-locomotive", 0.5)
 @RIN "engine-unit" 20
@@ -441,7 +441,7 @@ recipe = Recipe{Assembler}("flame-thrower", 10)
 recipe = Recipe{Assembler}("land-mine", 5)
 @RIN "steel-plate" 1
 @RIN "explosives" 2
-@ROUT "land-mine" 1
+@ROUT "land-mine" 4
 
 recipe = Recipe{Assembler}("rocket-launcher", 5)
 @RIN "iron-plate" 5
@@ -489,7 +489,7 @@ recipe = Recipe{Assembler}("science-pack-3", 12)
 
 recipe = Recipe{Assembler}("alien-science-pack", 12)
 @RIN "alien-artifact" 1
-@ROUT "alien-science-pack" 1
+@ROUT "alien-science-pack" 10
 
 recipe = Recipe{Assembler}("lab", 5)
 @RIN "electronic-circuit" 10
@@ -510,18 +510,18 @@ recipe = Recipe{Assembler}("green-wire", 0.5)
 recipe = Recipe{Assembler}("underground-belt", 1)
 @RIN "iron-plate" 10
 @RIN "transport-belt" 5
-@ROUT "underground-belt" 1
+@ROUT "underground-belt" 2
 
 recipe = Recipe{Assembler}("fast-underground-belt", 0.5)
 @RIN "iron-gear-wheel" 20
 @RIN "underground-belt" 2
-@ROUT "fast-underground-belt" 1
+@ROUT "fast-underground-belt" 2
 
 recipe = Recipe{Assembler}("express-underground-belt", 0.5)
 @RIN "iron-gear-wheel" 40
 @RIN "fast-underground-belt" 2
 @RIN "lubricant" 4
-@ROUT "express-underground-belt" 1
+@ROUT "express-underground-belt" 2
 
 recipe = Recipe{Assembler}("loader", 1)
 @RIN "inserter" 5
@@ -802,11 +802,11 @@ recipe = Recipe{Assembler}("concrete", 10)
 @RIN "stone-brick" 5
 @RIN "iron-ore" 1
 @RIN "water" 10
-@ROUT "concrete" 1
+@ROUT "concrete" 10
 
 recipe = Recipe{Assembler}("hazard-concrete", 0.25)
 @RIN "concrete" 10
-@ROUT "hazard-concrete" 1
+@ROUT "hazard-concrete" 10
 
 recipe = Recipe{Assembler}("landfill", 0.5)
 @RIN "stone" 20
@@ -829,4 +829,139 @@ recipe = Recipe{Assembler}("flamethrower-turret", 20)
 @RIN "pipe" 10
 @RIN "engine-unit" 5
 @ROUT "flamethrower-turret" 1
+
+recipe = Recipe{Assembler}("wood", 0.5)
+@RIN "raw-wood" 1
+@ROUT "wood" 2
+
+recipe = Recipe{Assembler}("wooden-chest", 0.5)
+@RIN "wood" 4
+@ROUT "wooden-chest" 1
+
+recipe = Recipe{Assembler}("iron-stick", 0.5)
+@RIN "iron-plate" 1
+@ROUT "iron-stick" 2
+
+recipe = Recipe{Assembler}("iron-axe", 0.5)
+@RIN "iron-stick" 2
+@RIN "iron-plate" 3
+@ROUT "iron-axe" 1
+
+recipe = Recipe{Assembler}("stone-furnace", 0.5)
+@RIN "stone" 5
+@ROUT "stone-furnace" 1
+
+recipe = Recipe{Assembler}("boiler", 0.5)
+@RIN "stone-furnace" 1
+@RIN "pipe" 1
+@ROUT "boiler" 1
+
+recipe = Recipe{Assembler}("steam-engine", 0.5)
+@RIN "iron-gear-wheel" 5
+@RIN "pipe" 5
+@RIN "iron-plate" 5
+@ROUT "steam-engine" 1
+
+recipe = Recipe{Assembler}("iron-gear-wheel", 0.5)
+@RIN "iron-plate" 2
+@ROUT "iron-gear-wheel" 1
+
+recipe = Recipe{Assembler}("electronic-circuit", 0.5)
+@RIN "iron-plate" 1
+@RIN "copper-cable" 3
+@ROUT "electronic-circuit" 1
+
+recipe = Recipe{Assembler}("transport-belt", 0.5)
+@RIN "iron-plate" 1
+@RIN "iron-gear-wheel" 1
+@ROUT "transport-belt" 2
+
+recipe = Recipe{Assembler}("electric-mining-drill", 2)
+@RIN "electronic-circuit" 3
+@RIN "iron-gear-wheel" 5
+@RIN "iron-plate" 10
+@ROUT "electric-mining-drill" 1
+
+recipe = Recipe{Assembler}("burner-mining-drill", 2)
+@RIN "iron-gear-wheel" 3
+@RIN "stone-furnace" 1
+@RIN "iron-plate" 3
+@ROUT "burner-mining-drill" 1
+
+recipe = Recipe{Assembler}("inserter", 0.5)
+@RIN "electronic-circuit" 1
+@RIN "iron-gear-wheel" 1
+@RIN "iron-plate" 1
+@ROUT "inserter" 1
+
+recipe = Recipe{Assembler}("burner-inserter", 0.5)
+@RIN "iron-plate" 1
+@RIN "iron-gear-wheel" 1
+@ROUT "burner-inserter" 1
+
+recipe = Recipe{Assembler}("pipe", 0.5)
+@RIN "iron-plate" 1
+@ROUT "pipe" 1
+
+recipe = Recipe{Assembler}("offshore-pump", 0.5)
+@RIN "electronic-circuit" 2
+@RIN "pipe" 1
+@RIN "iron-gear-wheel" 1
+@ROUT "offshore-pump" 1
+
+recipe = Recipe{Assembler}("copper-cable", 0.5)
+@RIN "copper-plate" 1
+@ROUT "copper-cable" 2
+
+recipe = Recipe{Assembler}("small-electric-pole", 0.5)
+@RIN "wood" 2
+@RIN "copper-cable" 2
+@ROUT "small-electric-pole" 2
+
+recipe = Recipe{Assembler}("pistol", 1)
+@RIN "copper-plate" 5
+@RIN "iron-plate" 5
+@ROUT "pistol" 1
+
+recipe = Recipe{Assembler}("submachine-gun", 3)
+@RIN "iron-gear-wheel" 10
+@RIN "copper-plate" 5
+@RIN "iron-plate" 10
+@ROUT "submachine-gun" 1
+
+recipe = Recipe{Assembler}("firearm-magazine", 2)
+@RIN "iron-plate" 2
+@ROUT "firearm-magazine" 1
+
+recipe = Recipe{Assembler}("light-armor", 3)
+@RIN "iron-plate" 40
+@ROUT "light-armor" 1
+
+recipe = Recipe{Assembler}("radar", 0.5)
+@RIN "electronic-circuit" 5
+@RIN "iron-gear-wheel" 5
+@RIN "iron-plate" 10
+@ROUT "radar" 1
+
+recipe = Recipe{Assembler}("small-lamp", 0.5)
+@RIN "electronic-circuit" 1
+@RIN "iron-stick" 3
+@RIN "iron-plate" 1
+@ROUT "small-lamp" 1
+
+recipe = Recipe{Assembler}("pipe-to-ground", 0.5)
+@RIN "pipe" 10
+@RIN "iron-plate" 5
+@ROUT "pipe-to-ground" 2
+
+recipe = Recipe{Assembler}("assembling-machine-1", 0.5)
+@RIN "electronic-circuit" 3
+@RIN "iron-gear-wheel" 5
+@RIN "iron-plate" 9
+@ROUT "assembling-machine-1" 1
+
+recipe = Recipe{Assembler}("repair-pack", 0.5)
+@RIN "electronic-circuit" 1
+@RIN "iron-gear-wheel" 1
+@ROUT "repair-pack" 1
 

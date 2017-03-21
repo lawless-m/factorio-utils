@@ -53,7 +53,7 @@ end
 type OilBasic <: Factory
 	modules::Vector{Module}
 	speed::Float64
-	function ChemPlant()
+	function OilBasic()
 		return new(Vector{Module}(), 1)
 	end
 end
@@ -61,7 +61,7 @@ end
 type OilAdvanced <: Factory
 	modules::Vector{Module}
 	speed::Float64
-	function ChemPlant()
+	function OilAdvanced()
 		return new(Vector{Module}(2), 1)
 	end
 end
@@ -102,17 +102,20 @@ type Recipe{Factory}
 	ins::Dict{AbstractString, Float64}
 	function Recipe(name, time)
 		# it's trick to rock a rhyme
-		return new( name,
+		Recipes[name] = new(name,
 			time, 
 			Dict(
 				Assembler=>[Assembler(1), Assembler(2), Assembler(3)], 
 				ChemPlant=>[ChemPlant()], 
 				Drill=>[Drill(1), Drill(2)], 
-				Smelter=>[ElectricSmelter()]
+				Smelter=>[ElectricSmelter()],
+				OilBasic=>[OilBasic()],
+				OilAdvanced=>[OilAdvanced()]
 				)[Factory], 
 			Dict{AbstractString, Float64}(),
 			Dict{AbstractString, Float64}()
 			)
+		return Recipes[name]
 	end
 end
 
@@ -128,3 +131,14 @@ end
 
 Recipes = Dict{AbstractString, Recipe}()
 
+macro RIN(iname, iqty)
+	return quote
+		recipe.ins[$iname] = $iqty / recipe.time
+	end
+end
+
+macro ROUT(iname, iqty)
+	return quote
+		recipe.outs[$iname] = $iqty / recipe.time
+	end
+end

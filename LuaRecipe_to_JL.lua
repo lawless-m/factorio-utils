@@ -9,6 +9,7 @@ recipfns = {
   "C:\\Users\\mwheath\\Documents\\Factorio\\prototypes\\recipe\\module.lua",
   "C:\\Users\\mwheath\\Documents\\Factorio\\prototypes\\recipe\\recipe.lua", 
   "C:\\Users\\mwheath\\Documents\\Factorio\\prototypes\\recipe\\turret.lua",
+  "C:\\Users\\mwheath\\Documents\\Factorio\\prototypes\\recipe\\demo-recipe.lua"
 }
 
 JuMPfn = "recipe_protos.jl"
@@ -87,7 +88,12 @@ function writeRecips()
 							printIngs("@ROUT", res[i])
 						end
 					else
-						rfid:write("@ROUT \"" .. res .. "\" 1\n")
+						if recips[r]["result_count"] ~= nil then
+							a = tostring(recips[r]["result_count"])
+						else
+							a = "1"
+						end
+						rfid:write("@ROUT \"" .. res .. "\" " .. a .. "\n")
 					end
 					
 					rfid:write("\n")
