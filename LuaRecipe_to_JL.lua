@@ -70,6 +70,8 @@ function writeRecips()
 						f = "OilAdvanced"
 					elseif recips[r]["category"] == "chemistry" then
 						f = "ChemPlant"
+					elseif recips[r]["category"] == "smelting" then
+						f = "Smelter"
 					else
 						f = "Assembler"
 					end

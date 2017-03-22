@@ -80,7 +80,7 @@ type ElectricSmelter <: Smelter
 	modules::Vector{Module}
 	speed::Float64
 	function ElectricSmelter()
-		return new(Vector{Module}(2), 1.25)
+		return new(Vector{Module}(2), 2)
 	end
 end
 
@@ -119,26 +119,27 @@ type Recipe{Factory}
 	end
 end
 
-function perSec(r::Recipe, f::Factory)
-	s = 0.0
+function perSec(baseSpeed::Float64, f::Factory)
+	s = f.speed
 	for m in 1:length(f.modules)
-		if isdefined(f.modules[m])
+		if isdefined(f.modules, m)
 			s += f.speed * f.modules[m].speed
 		end
 	end
-	r.speed > 0 ? s / r.speed : 0
+#	@printf "base %0.2f of s %0.2f becomes %0.2f %s %s\n" baseSpeed s baseSpeed/s typeof(f) f
+	s > 0 ? baseSpeed/s : 0
 end
 
 Recipes = Dict{AbstractString, Recipe}()
 
 macro RIN(iname, iqty)
 	return quote
-		recipe.ins[$iname] = $iqty / recipe.time
+		recipe.ins[$iname] = $iqty #/ recipe.time
 	end
 end
 
 macro ROUT(iname, iqty)
 	return quote
-		recipe.outs[$iname] = $iqty / recipe.time
+		recipe.outs[$iname] = $iqty #/ recipe.time
 	end
 end

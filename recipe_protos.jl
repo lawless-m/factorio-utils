@@ -220,7 +220,7 @@ recipe = Recipe{ChemPlant}("flame-thrower-ammo", 3)
 @RIN "heavy-oil" 2.5
 @ROUT "flame-thrower-ammo" 1
 
-recipe = Recipe{Assembler}("steel-plate", 17.5)
+recipe = Recipe{Smelter}("steel-plate", 17.5)
 @RIN "iron-plate" 5
 @ROUT "steel-plate" 1
 

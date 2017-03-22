@@ -3,33 +3,66 @@ using JuMP
 include("Types.jl")
 include("recipe_protos.jl")
 
-function production(r::Recipe, nfacs)
+macro minsec(n) :((60($n), ($n), 60 * $n * mins)) end
+
+function production(r::Recipe, nfacs, mins)
 	if nfacs == 0 return end
-	@printf "%s: %0.2f\n" r.name nfacs
+	
+	function prnt(igs)
+		for (k,v) in igs
+			@printf "\t\t \"%s\" %0.2f / %0.2f per min/sec : Total %0.2f in \n" k @minsec(v * nfacs)...
+		end
+	end
+	@printf "%s: %0.2f factories in %d mins\n" r.name nfacs mins
 	@printf "\tProduces\n"
-	for (k,v) in r.outs
-		@printf "\t\t%0.2f \"%s\" per min - %0.2f per second\n" 60v * nfacs k v * nfacs
-	end
+	prnt(r.outs)
 	@printf "\tConsumes\n"
-	for (k,v) in r.ins
-		@printf "\t\t%0.2f \"%s\" per min - %0.2f per second\n" 60v * nfacs k v * nfacs
-	end
+	prnt(r.ins)
 end
 
 macro Recipes()
 	:(collect(keys(Recipes)))
 end
 
-macro FOUT(R, I) :(Factories[$R] * get(Recipes[$R].outs, $I, 0)) end
-macro FIN(R, I) :(Factories[$R] * get(Recipes[$R].ins, $I, 0)) end 
-macro FOUTS(R) :(sum([@FOUT(F, $R) for F in @Recipes])) end
-macro FINS(R) :(sum([@FIN(F, $R) for F in @Recipes])) end
+macro FOUTx(R, I) 
+	return quote
+		t = get(Recipes[$R].outs, $I, 0)
+		if t > 0
+			ps = perSec(Recipes[$R].time,1 )
+			@printf("R:%s I:%s t:%0.2f ps:%0.2f\n", $R, $I, t, ps)
+			Factories[$R] * t / ps
+		else
+			0.
+		end
+	end
+end
+macro FOUT(R, I)
+	return quote
+		Factories[$R] * (get(Recipes[$R].outs, $I, 0) * Recipes[$R].factory[end:end][1].speed)
+	end
+end
 
+macro FIN(R, I) :(Factories[$R] * (get(Recipes[$R].ins, $I, 0) * Recipes[$R].factory[end:end][1].speed))  end 
+macro FOUTS(K) :(sum([@FOUT(F, $K) for F in @Recipes])) end
+macro FINS(K) :(sum([@FIN(F, $K) for F in @Recipes])) end
 
-function report(status)
+macro FCON(R, I) :(getvalue(Factories[$R]) * get(Recipes[$R].ins, $I, 0)) end 
+macro FCONS(K) :(sum([@FCON(F, $K) for F in @Recipes])) end 
+
+function report(status, mins)
 	if status == :Optimal
 		for r in @Recipes
-			production(Recipes[r], getvalue(Factories[r]))
+			production(Recipes[r], getvalue(Factories[r]), mins)
+		end
+		function prnt(i)
+			n = @FCONS(i)
+			if n > 0
+				@printf "\"%s\" %0.2f / %0.2f per min/sec : Total %0.2f\n" i @minsec(n)...
+			end
+		end
+		@printf "Raws in %d mins\n" mins
+		for k in ["iron-plate" "copper-plate" "water" "coal" "petroleum-gas"]
+			prnt(k)
 		end
 	elseif status == :Unbounded
 		print("Problem is unbounded")
@@ -45,26 +78,25 @@ function report(status)
 end
 
 m = Model()
-@variable(m, Factories[@Recipes] >= 0)
+@variable(m, Factories[@Recipes] >= 0, Int)
 for R in @Recipes
 	@constraint(m, @FOUTS(R) >= @FINS(R))
 end
 
-const PerMin = 1 / 60
-const Minutes = 1 #/ 15
-
-#@constraint(m, @FOUTS("solar-panel") >= 188PerMin * Minutes)
-#@constraint(m, @FOUTS("accumulator") >= 155PerMin * Minutes)
-#@constraint(m, @FOUTS("medium-electric-pole") >= 16PerMin * Minutes)
-#@constraint(m, @FOUTS("substation") >= 10PerMin * Minutes)
-
-
 @objective(m, Min, sum([Factories[R] for R in @Recipes]))
 
+const PerMin = 1 / 60
+const Minutes = 1
 
-@constraint(m, @FOUTS("electronic-circuit") >= 60PerMin * Minutes)
 
+#@constraint(m, @FOUTS("solar-panel") >= 188PerMin / Minutes)
+#@constraint(m, @FOUTS("accumulator") >= 155PerMin / Minutes)
+#@constraint(m, @FOUTS("medium-electric-pole") >= 16PerMin / Minutes)
+#@constraint(m, @FOUTS("substation") >= 10PerMin / Minutes)
+#@constraint(m, @FOUTS("electronic-circuit") >= 120PerMin / Minutes)
 
-report(solve(m))
+@constraint(m, Factories["electronic-circuit"] >= 1)
+@constraint(m, @FIN("electronic-circuit", "copper-cable") == @FOUTS("copper-cable"))
+report(solve(m), Minutes)
 
 
