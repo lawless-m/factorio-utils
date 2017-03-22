@@ -5,7 +5,7 @@ include("recipe_protos.jl")
 
 function production(r::Recipe, nfacs)
 	if nfacs == 0 return end
-	@printf "%s: %d\n" r.name nfacs
+	@printf "%s: %0.2f\n" r.name nfacs
 	@printf "\tProduces\n"
 	for (k,v) in r.outs
 		@printf "\t\t%0.2f \"%s\" per min - %0.2f per second\n" 60v * nfacs k v * nfacs
@@ -45,20 +45,25 @@ function report(status)
 end
 
 m = Model()
-@variable(m, Factories[@Recipes] >= 0, Int)
+@variable(m, Factories[@Recipes] >= 0)
 for R in @Recipes
 	@constraint(m, @FOUTS(R) >= @FINS(R))
 end
 
 const PerMin = 1 / 60
-const Minutes = 1 / 15
+const Minutes = 1 #/ 15
 
 #@constraint(m, @FOUTS("solar-panel") >= 188PerMin * Minutes)
 #@constraint(m, @FOUTS("accumulator") >= 155PerMin * Minutes)
 #@constraint(m, @FOUTS("medium-electric-pole") >= 16PerMin * Minutes)
-@constraint(m, @FOUTS("substation") >= 1PerMin * Minutes)
+#@constraint(m, @FOUTS("substation") >= 10PerMin * Minutes)
+
 
 @objective(m, Min, sum([Factories[R] for R in @Recipes]))
+
+
+@constraint(m, @FOUTS("electronic-circuit") >= 60PerMin * Minutes)
+
 
 report(solve(m))
 
