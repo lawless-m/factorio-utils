@@ -86,22 +86,12 @@ end
 @objective(m, Min, sum([Factories[R] for R in @Recipes]))
 
 const PerMin = 1 / 60
-const Minutes = 1
+const Minutes = 5
 
 
-#@constraint(m, @FOUTS("solar-panel") >= 188PerMin / Minutes)
-#@constraint(m, @FOUTS("accumulator") >= 155PerMin / Minutes)
-#@constraint(m, @FOUTS("medium-electric-pole") >= 16PerMin / Minutes)
+@constraint(m, @FOUTS("solar-panel") >= 188PerMin / Minutes)
+@constraint(m, @FOUTS("accumulator") >= 155PerMin / Minutes)
+@constraint(m, @FOUTS("medium-electric-pole") >= 16PerMin / Minutes)
 @constraint(m, @FOUTS("substation") >= 1PerMin / Minutes)
-
-#@constraint(m, @FOUTS("flamethrower-turret") >= 10PerMin / Minutes)
-#@constraint(m, @FOUTS("laser-turret") >= 10PerMin / Minutes)
-#@constraint(m, @FOUTS("medium-electric-pole") >= 10PerMin / Minutes)
-#@constraint(m, @FOUTS("big-electric-pole") >= 10PerMin / Minutes)
-#@constraint(m, @FOUTS("stone-wall") >= 400PerMin / Minutes)
-#@constraint(m, @FOUTS("pipe") >= 10PerMin / Minutes)
-#@constraint(m, @FOUTS("pipe-to-ground") >= 10PerMin / Minutes)
-
-#@constraint(m, @FOUTS("electric-furnace") >= 1PerMin / Minutes)
 
 report(solve(m), Minutes)
