@@ -9,7 +9,8 @@ recipfns = {
   "C:\\Users\\mwheath\\Documents\\Factorio\\prototypes\\recipe\\module.lua",
   "C:\\Users\\mwheath\\Documents\\Factorio\\prototypes\\recipe\\recipe.lua", 
   "C:\\Users\\mwheath\\Documents\\Factorio\\prototypes\\recipe\\turret.lua",
-  "C:\\Users\\mwheath\\Documents\\Factorio\\prototypes\\recipe\\demo-recipe.lua"
+  "C:\\Users\\mwheath\\Documents\\Factorio\\prototypes\\recipe\\demo-recipe.lua",
+  "C:\\Users\\mwheath\\Documents\\Factorio\\prototypes\\recipe\\demo-furnace-recipe.lua"
 }
 
 JuMPfn = "recipe_protos.jl"

@@ -965,3 +965,15 @@ recipe = Recipe{Assembler}("repair-pack", 0.5)
 @RIN "iron-gear-wheel" 1
 @ROUT "repair-pack" 1
 
+recipe = Recipe{Smelter}("copper-plate", 3.5)
+@RIN "copper-ore" 1
+@ROUT "copper-plate" 1
+
+recipe = Recipe{Smelter}("iron-plate", 3.5)
+@RIN "iron-ore" 1
+@ROUT "iron-plate" 1
+
+recipe = Recipe{Smelter}("stone-brick", 3.5)
+@RIN "stone" 2
+@ROUT "stone-brick" 1
+

@@ -61,7 +61,7 @@ function report(status, mins)
 			end
 		end
 		@printf "Raws in %d mins\n" mins
-		for k in ["iron-plate" "copper-plate" "water" "coal" "petroleum-gas"]
+		for k in ["iron-plate" "copper-plate" "water" "coal" "petroleum-gas" "stone"]
 			prnt(k)
 		end
 	elseif status == :Unbounded
@@ -78,7 +78,7 @@ function report(status, mins)
 end
 
 m = Model()
-@variable(m, Factories[@Recipes] >= 0, Int)
+@variable(m, Factories[@Recipes] >= 0)
 for R in @Recipes
 	@constraint(m, @FOUTS(R) >= @FINS(R))
 end
@@ -92,11 +92,16 @@ const Minutes = 1
 #@constraint(m, @FOUTS("solar-panel") >= 188PerMin / Minutes)
 #@constraint(m, @FOUTS("accumulator") >= 155PerMin / Minutes)
 #@constraint(m, @FOUTS("medium-electric-pole") >= 16PerMin / Minutes)
-#@constraint(m, @FOUTS("substation") >= 10PerMin / Minutes)
-#@constraint(m, @FOUTS("electronic-circuit") >= 120PerMin / Minutes)
+@constraint(m, @FOUTS("substation") >= 1PerMin / Minutes)
 
-@constraint(m, Factories["electronic-circuit"] >= 1)
-@constraint(m, @FIN("electronic-circuit", "copper-cable") == @FOUTS("copper-cable"))
+#@constraint(m, @FOUTS("flamethrower-turret") >= 10PerMin / Minutes)
+#@constraint(m, @FOUTS("laser-turret") >= 10PerMin / Minutes)
+#@constraint(m, @FOUTS("medium-electric-pole") >= 10PerMin / Minutes)
+#@constraint(m, @FOUTS("big-electric-pole") >= 10PerMin / Minutes)
+#@constraint(m, @FOUTS("stone-wall") >= 400PerMin / Minutes)
+#@constraint(m, @FOUTS("pipe") >= 10PerMin / Minutes)
+#@constraint(m, @FOUTS("pipe-to-ground") >= 10PerMin / Minutes)
+
+#@constraint(m, @FOUTS("electric-furnace") >= 1PerMin / Minutes)
+
 report(solve(m), Minutes)
-
-
