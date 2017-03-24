@@ -119,27 +119,8 @@ type Recipe{Factory}
 	end
 end
 
-function perSec(baseSpeed::Float64, f::Factory)
-	s = f.speed
-	for m in 1:length(f.modules)
-		if isdefined(f.modules, m)
-			s += f.speed * f.modules[m].speed
-		end
-	end
-#	@printf "base %0.2f of s %0.2f becomes %0.2f %s %s\n" baseSpeed s baseSpeed/s typeof(f) f
-	s > 0 ? baseSpeed/s : 0
-end
 
 Recipes = Dict{AbstractString, Recipe}()
 
-macro RIN(iname, iqty)
-	return quote
-		recipe.ins[$iname] = $iqty #/ recipe.time
-	end
-end
-
-macro ROUT(iname, iqty)
-	return quote
-		recipe.outs[$iname] = $iqty #/ recipe.time
-	end
-end
+macro RIN(iname, iqty) :(recipe.ins[$iname] = $iqty) end
+macro ROUT(iname, iqty) :(recipe.outs[$iname] = $iqty) end
