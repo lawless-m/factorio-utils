@@ -783,7 +783,7 @@ recipe = Recipe{Assembler}("rocket-control-unit", 30)
 @RIN "speed-module" 1
 @ROUT "rocket-control-unit" 1
 
-recipe = Recipe{Assembler}("rocket-part", 3)
+recipe = Recipe{Silo}("rocket-part", 3)
 @RIN "low-density-structure" 10
 @RIN "rocket-fuel" 10
 @RIN "rocket-control-unit" 10

@@ -76,13 +76,15 @@ end
 @objective(m, Min, sum([Factories[R] for R in @Recipes]))
 
 const PerMin = 1 / 60
-const Minutes = 1
+const Minutes = 120
 
 const YellowBelt = 800PerMin
 const RedBelt = 1600PerMin
 const BlueBelt = 2400PerMin
 
-@constraint(m, @FOUTS("rocket-part") >= RedBelt / Minutes)
+#@constraint(m, @FOUTS("rocket-part") >= 100PerMin / Minutes)
+@constraint(m, @FOUTS("satellite") >= 1PerMin / Minutes)
+
 
 
 

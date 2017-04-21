@@ -45,7 +45,7 @@ type Assembler <: Factory
 	speed::Float64
 	function Assembler(n)
 		if n > 0 && n < 4
-			return new(Vector{Module}([0 0 4][n]), [0.75 1 1.25][n]) # [nmodules...][n], [speeds...][n]
+			return new(Vector{Module}([0 2 4][n]), [0.75 1 1.25][n]) # [nmodules...][n], [speeds...][n]
 		end
 	end
 end
@@ -94,6 +94,14 @@ type Drill <: Factory
 	end
 end
 
+type Silo <: Factory	
+	modules::Vector{Module}
+	speed::Float64
+	function Silo()
+		return new(Vector{Module}(4), 1)
+	end
+end
+
 type Recipe{Factory}
 	name::AbstractString
 	time::Float64
@@ -110,7 +118,8 @@ type Recipe{Factory}
 				Drill=>[Drill(1), Drill(2)], 
 				Smelter=>[ElectricSmelter()],
 				OilBasic=>[OilBasic()],
-				OilAdvanced=>[OilAdvanced()]
+				OilAdvanced=>[OilAdvanced()],
+				Silo=>[Silo()]
 				)[Factory], 
 			Dict{AbstractString, Float64}(),
 			Dict{AbstractString, Float64}()
