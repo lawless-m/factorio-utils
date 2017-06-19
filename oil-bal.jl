@@ -41,28 +41,28 @@ end
 
 @enum Rnum AOP HOC LOC SOL ROK
 
-recips[AOP] = Recipe("Advanced Oil Processing", 5.0, 1 * 1.5 * 1.5)
-@IN AOP "Crude Oil" 10.
-@IN AOP "Water" 5.
-@OUT AOP "Heavy Oil" 1.
-@OUT AOP "Light Oil" 4.5
-@OUT AOP "Petroleum Gas" 5.5
+recips[AOP] = Recipe("Advanced Oil Processing", 5.0, 1.)
+@IN AOP "Crude Oil" 200.
+@IN AOP "Water" 100.
+@OUT AOP "Heavy Oil" 10.
+@OUT AOP "Light Oil" 45.
+@OUT AOP "Petroleum Gas" 55.
 
-recips[HOC] = Recipe("Heavy Oil Cracking", 5.0 , 1.25)
-@IN HOC "Heavy Oil" 4.
-@IN HOC "Water" 3.
-@OUT HOC "Light Oil" 3.
+recips[HOC] = Recipe("Heavy Oil Cracking", 3.0 , 1.25)
+@IN HOC "Heavy Oil" 40.
+@IN HOC "Water" 30.
+@OUT HOC "Light Oil" 30.
 
 recips[LOC] = Recipe("Light Oil Cracking", 5.0 , 1.25)
-@IN LOC "Light Oil" 3.
-@IN LOC "Water" 3.
-@OUT LOC "Petroleum Gas" 2.
+@IN LOC "Light Oil" 30.
+@IN LOC "Water" 30.
+@OUT LOC "Petroleum Gas" 20.
 
-recips[SOL] = Recipe("Solid Fuel", 2., 1.25)
-@IN SOL "Petroleum Gas" 2.0
+recips[SOL] = Recipe("Solid Fuel", 3., 1.25)
+@IN SOL "Petroleum Gas" 20.
 @OUT SOL "Solid Fuel" 1.
 
-recips[ROK] = Recipe("Rocket Fuel Assembly", 30., 1.25)
+recips[ROK] = Recipe("Rocket Fuel", 30., 1.25)
 @IN ROK "Solid Fuel" 10.
 @OUT ROK "Rocket Fuel" 1.
 
@@ -74,7 +74,7 @@ m = Model()
 @variable(m, SOLs >= 0, Int)
 @variable(m, ROKs >= 0, Int)
 
-@constraint(m, AOPs * recips[AOP].ins["Crude Oil"] <= 240)
+@constraint(m, AOPs * recips[AOP].ins["Crude Oil"] <= 2400)
 @constraint(m, HOCs * recips[HOC].ins["Heavy Oil"] <= AOPs * recips[AOP].outs["Heavy Oil"])
 @constraint(m, LOCs * recips[LOC].ins["Light Oil"] <= AOPs * recips[AOP].outs["Light Oil"] + HOCs * recips[HOC].outs["Light Oil"])
 @constraint(m, SOLs * recips[SOL].ins["Petroleum Gas"] <= AOPs * recips[AOP].outs["Petroleum Gas"] + LOCs * recips[LOC].outs["Petroleum Gas"])

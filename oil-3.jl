@@ -13,7 +13,7 @@ type Recipe
 end
 
 function production(r::Recipe, nfacs)
-	@printf "%s: %d\n" r.name nfacs
+	@printf "%s: %0.1f\n" r.name nfacs
 	@printf "\tProduces\n"
 	for (k,v) in r.outs
 		@printf "\t\t%0.2f %s per min / %0.2f per sec\n" 60v * nfacs k v*nfacs
@@ -40,59 +40,62 @@ recips[PJ] = Recipe("Pumpjacks", 1.0, 1)
 @IN PJ "Pump" 1
 @OUT PJ "Crude Oil" 0.2
 
-recips[AOP] = Recipe("Advanced Oil Processing", 5.0, 1)
-@IN AOP "Crude Oil" 10.
-@IN AOP "Water" 5.
-@OUT AOP "Heavy Oil" 1.
-@OUT AOP "Light Oil" 4.5
-@OUT AOP "Petroleum Gas" 5.5
+recips[AOP] = Recipe("Advanced Oil Processing", 5.0, 1.)
+@IN AOP "Crude Oil" 200.
+@IN AOP "Water" 100.
+@OUT AOP "Heavy Oil" 10.
+@OUT AOP "Light Oil" 45.
+@OUT AOP "Petroleum Gas" 55.
 
-recips[HOC] = Recipe("Heavy Oil Cracking", 5.0 , 1.25)
-@IN HOC "Heavy Oil" 4.
-@IN HOC "Water" 3.
-@OUT HOC "Light Oil" 3.
+recips[HOC] = Recipe("Heavy Oil Cracking", 3.0 , 1.25)
+@IN HOC "Heavy Oil" 40.
+@IN HOC "Water" 30.
+@OUT HOC "Light Oil" 30.
+
 
 recips[LOC] = Recipe("Light Oil Cracking", 5.0 , 1.25)
-@IN LOC "Light Oil" 3.
-@IN LOC "Water" 3
-@OUT LOC "Petroleum Gas" 2.
+@IN LOC "Light Oil" 30.
+@IN LOC "Water" 30.
+@OUT LOC "Petroleum Gas" 20.
 
-recips[PGSOL] = Recipe("PG Solid Fuel", 2., 1.25)
-@IN PGSOL "Petroleum Gas" 2.0
+recips[PGSOL] = Recipe("PG Solid Fuel", 3., 1.25)
+@IN PGSOL "Petroleum Gas" 20.
 @OUT PGSOL "Solid Fuel" 1
 
-recips[LOSOL] = Recipe("LO Solid Fuel", 2., 1.25)
-@IN LOSOL "Light Oil" 1.0
+recips[LOSOL] = Recipe("LO Solid Fuel", 3., 1.25)
+@IN LOSOL "Light Oil" 10.
 @OUT LOSOL "Solid Fuel" 1
 
-recips[HOSOL] = Recipe("HO Solid Fuel", 2., 1.25)
-@IN HOSOL "Heavy Oil" 1.0
+recips[HOSOL] = Recipe("HO Solid Fuel", 3., 1.25)
+@IN HOSOL "Heavy Oil" 20.0
 @OUT HOSOL "Solid Fuel" 1
 
 recips[ROK] = Recipe("Rocket Fuel Assembly", 30., 1.25)
 @IN ROK "Solid Fuel" 10.
 @OUT ROK "Rocket Fuel" 1
 
-@variable(m, PJs >= 0, Int)
-@variable(m, AOPs >= 0, Int)
-@variable(m, HOCs >= 0, Int)
-@variable(m, LOCs >= 0, Int)
-@variable(m, PGSOLs >= 0, Int)
-@variable(m, HOSOLs >= 0, Int)
-@variable(m, LOSOLs >= 0, Int)
-@variable(m, ROKs >= 1, Int)
+@variable(m, PJs >= 0) #, Int)
+@variable(m, AOPs >= 0) #, Int)
+@variable(m, HOCs >= 0) #, Int)
+@variable(m, LOCs >= 0) #, Int)
+@variable(m, PGSOLs >= 0) #, Int)
+@variable(m, HOSOLs >= 0) #, Int)
+@variable(m, LOSOLs >= 0) #, Int)
+@variable(m, ROKs >= 0) #, Int)
 
 macro FIN(Fn, F, R) :($Fn * recips[$F].ins[$R]) end
 macro FOUT(Fn, F, R) :($Fn * recips[$F].outs[$R] )end
 
-@constraint(m, @FOUT(PJs, PJ, "Crude Oil") <= 240)
+@constraint(m, AOPs == 10)
+
+@constraint(m, @FOUT(PJs, PJ, "Crude Oil") <= 2400)
 @constraint(m, @FIN(AOPs, AOP, "Crude Oil") == @FOUT(PJs, PJ, "Crude Oil"))
 @constraint(m, @FIN(HOCs, HOC, "Heavy Oil") + @FIN(HOSOLs, HOSOL, "Heavy Oil") == @FOUT(AOPs, AOP, "Heavy Oil"))
 @constraint(m, @FIN(LOCs, LOC, "Light Oil") + @FIN(LOSOLs, LOSOL, "Light Oil") == @FOUT(AOPs, AOP, "Light Oil") + @FOUT(HOCs, HOC, "Light Oil"))
 @constraint(m, @FIN(PGSOLs, PGSOL, "Petroleum Gas") == @FOUT(AOPs, AOP, "Petroleum Gas") + @FOUT(LOCs, LOC, "Petroleum Gas"))
 @constraint(m, @FIN(ROKs, ROK, "Solid Fuel") == @FOUT(PGSOLs, PGSOL, "Solid Fuel") + @FOUT(HOSOLs, HOSOL, "Solid Fuel") + @FOUT(LOSOLs, LOSOL, "Solid Fuel"))
 
-@objective(m, Min, sum([PJs, AOPs, HOCs, LOCs, PGSOLs, HOSOLs, LOSOLs, ROKs]))
+@objective(m, Max, sum([PGSOLs, HOSOLs, LOSOLs]))
 solve(m)
 
 

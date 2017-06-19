@@ -23,6 +23,7 @@ function getrecips(fn)
 	
 	loader = function()
 		txt = fid:read()
+		print(txt)
 		if txt == "data:extend(" then
 			txt = "return "
 		elseif txt == ")" then
@@ -32,6 +33,7 @@ function getrecips(fn)
 		elseif txt == "" then
 			txt = loader()
 		end
+		print(txt)
 		return txt
 	end
 
