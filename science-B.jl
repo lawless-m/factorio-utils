@@ -1,5 +1,7 @@
 using JuMP
 
+
+
 m = Model()
 
 type Recipe
@@ -21,10 +23,12 @@ function production(r::Recipe, nfacs)
 		@printf "\t\t%0.2f %s per min / %0.2f per sec\n" 60v * nfacs k v*nfacs
 	end
 end
-
-@enum Rnum YPACK BATT WIRE GREEN BLUE RED SPEED1
+@enum Rnum BPACK BATT WIRE GREEN BLUE RED SPEED1
 
 recips = Dict{Rnum, Recipe}()
+
+include("science_recipe.jl")
+
 
 macro IN(rnum, iname, iqty)
 	:(recips[$rnum].ins[$iname] = $iqty / recips[$rnum].time)
@@ -47,7 +51,7 @@ recips[BATT] = Recipe("battery", 5, 1.25)
 @IN BATT "copper-plate" 1
 @OUT BATT "battery" 1
 
-recips[BLUE] = Recipe("processing-unit", 1, 1.25)
+recips[BLUE] = Recipe("processing-unit", 10, 1.25)
 @IN BLUE "electronic-circuit" 20
 @IN BLUE "advanced-circuit" 2
 @IN BLUE "sulfuric-acid" 5
