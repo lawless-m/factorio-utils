@@ -1,19 +1,19 @@
-abstract Module
+abstract type Module end
 
-type Productivity <: Module
+struct Productivity <: Module
 	yield::Float64
 	speed::Float64
 	energy::Float64
 	pollution::Float64
 	function Productivity(n::Int64)
 		if n > 0 && n < 4
-			y, s, e, p = [(0.04, -0.15, 0.4, 0.05) (0.06, -0.15, 0.6, 0.075) (0.10, -0.15, 0.8, 0.10)][n]...
+			y, s, e, p = [(0.04, -0.15, 0.4, 0.05) (0.06, -0.15, 0.6, 0.075) (0.10, -0.15, 0.8, 0.10)][n]
 			return new(y, s, e, p)
 		end
 	end
 end
 
-type Speed <: Module
+struct Speed <: Module
 	yield::Float64
 	speed::Float64
 	energy::Float64
@@ -26,21 +26,22 @@ type Speed <: Module
 	end
 end
 
-type Efficiency <: Module
+struct Efficiency <: Module
 	yield::Float64
 	speed::Float64
 	energy::Float64
 	pollution::Float64
 	function Efficiency(n::Int64)
 		if n > 0 && n < 4
-			y, s, e, p = [(0.0, 0.0, -0.3, 0.) (0.0, 0.0, -0.4, 0.) (0.0, 0.0, -0.5, 0.)][n]...
+			y, s, e, p = [(0.0, 0.0, -0.3, 0.) (0.0, 0.0, -0.4, 0.) (0.0, 0.0, -0.5, 0.)][n]
 			return new(y, s, e, p)
 		end
 	end
 end
-abstract Factory
 
-type Assembler <: Factory
+abstract type Factory end
+
+struct Assembler <: Factory
 	modules::Vector{Module}
 	speed::Float64
 	function Assembler(n)
@@ -50,33 +51,33 @@ type Assembler <: Factory
 	end
 end
 	
-type OilBasic <: Factory
+struct OilBasic <: Factory
 	modules::Vector{Module}
 	speed::Float64
-	function OilBasic()
-		return new(Vector{Module}(), 1)
-	end
+	OilBasic() = new(Vector{Module}(), 1)
 end
 
-type OilAdvanced <: Factory
+struct OilAdvanced <: Factory
 	modules::Vector{Module}
 	speed::Float64
-	function OilAdvanced()
-		return new(Vector{Module}(2), 1)
-	end
+	OilAdvanced() = new(Vector{Module}(2), 1)
 end
 
-type ChemPlant <: Factory	
+struct ChemPlant <: Factory	
 	modules::Vector{Module}
 	speed::Float64
-	function ChemPlant()
-		return new(Vector{Module}(2), 1.25)
-	end
+	ChemPlant() = new(Vector{Module}(2), 1.25)
 end
 
-abstract Smelter <: Factory 
+struct Centrifuge <: Factory
+	modules::Vector{Module}
+	speed::Float64
+	Centrifuge() = new(Vector{Module}(2), 1.25)
+end
 
-type ElectricSmelter <: Smelter
+abstract type Smelter <: Factory end
+
+struct ElectricSmelter <: Smelter
 	modules::Vector{Module}
 	speed::Float64
 	function ElectricSmelter()
@@ -84,7 +85,7 @@ type ElectricSmelter <: Smelter
 	end
 end
 
-type Drill <: Factory	
+struct Drill <: Factory	
 	modules::Vector{Module}
 	speed::Float64
 	function Drill(n)
@@ -94,7 +95,7 @@ type Drill <: Factory
 	end
 end
 
-type Silo <: Factory	
+struct Silo <: Factory	
 	modules::Vector{Module}
 	speed::Float64
 	function Silo()
@@ -102,15 +103,13 @@ type Silo <: Factory
 	end
 end
 
-type Recipe{Factory}
+struct Recipe{Factory}
 	name::AbstractString
 	time::Float64
 	factory::Vector{Factory}
 	outs::Dict{AbstractString, Float64}
 	ins::Dict{AbstractString, Float64}
-	function Recipe(name, time)
-		# it's trick to rock a rhyme
-		Recipes[name] = new(name,
+	Recipe{T}(name, time) where {T <: Factory} = Recipes[name] = new(name,
 			time, 
 			Dict(
 				Assembler=>[Assembler(1), Assembler(2), Assembler(3)], 
@@ -119,13 +118,12 @@ type Recipe{Factory}
 				Smelter=>[ElectricSmelter()],
 				OilBasic=>[OilBasic()],
 				OilAdvanced=>[OilAdvanced()],
-				Silo=>[Silo()]
-				)[Factory], 
+				Silo=>[Silo()],
+				Centrifuge=>[Centrifuge()]
+				)[T], 
 			Dict{AbstractString, Float64}(),
 			Dict{AbstractString, Float64}()
 			)
-		return Recipes[name]
-	end
 end
 
 

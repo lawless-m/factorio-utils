@@ -1,7 +1,9 @@
+#!/usr/local/bin/julia 
+
 using JuMP
 
 include("Types.jl")
-include("recipe_protos.jl")
+include("recipe_protos_cheap.jl")
 
 macro minsec(n) :((60($n), ($n), 60 * $n * mins)) end
 macro PerSec(R)	

@@ -50,6 +50,8 @@ data["extend"] = function(data, recips)
 				f = "ChemPlant"
 			elseif recips[r]["category"] == "smelting" then
 				f = "Smelter"
+			elseif recips[r]["category"] == "centrifuging" then
+				f = "Centrifuge"
 			else
 				f = "Assembler"
 			end
