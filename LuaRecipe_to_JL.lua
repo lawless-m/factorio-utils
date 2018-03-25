@@ -112,8 +112,6 @@ function writeRecips()
 		print(recipfns[fn])
 		f = loadfile(recipfns[fn])
 		f()
-		print("procced")
-		
 	end
 end
 
